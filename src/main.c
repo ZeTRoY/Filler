@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:37:58 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/02 18:52:53 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/04 14:12:23 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,62 @@ static void	exit_func(char *str)
 	exit (1);
 }
 
-static int	get_piece(char *line, t_filler *filler)
+static int	get_plateau(char *line, t_filler *filler)
 {
 	int i;
 
 	i = 0;
 	get_next_line(1, &line);
 	if (ft_strnequ("Plateau ", line, 8) == 0)
+	{
+		ft_strdel(&line);
 		return (0);
+	}
 	if (*(line + 8) < '0' || *(line + 8) > '9')
+	{
+		ft_strdel(&line);
 		return (0);
+	}
 	filler->x = ft_atoi(line + 8);
 	while (*(line + 8 + i) >= '0' && *(line + 8 + i) <= '9')
 		i++;
-	if (*(line + 8 + i) < '0' || *(line + 8 + i) > '9')
+	if (++i && (*(line + 8 + i) < '0' || *(line + 8 + i) > '9'))
+	{
+		ft_strdel(&line);
 		return (0);
+	}
 	filler->y = ft_atoi(line + 8 + i);
+	ft_strdel(&line);
 	return (1);
+}
+
+static void	get_map(char *line, t_filler *filler)
+{
+	int i;
+	int j;
+	int k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	// filler->map = (int **)malloc(sizeof(int *) * filler->x);
+	while (j < filler->x - 1)
+	{
+		get_next_line(1, &line); //error handle
+		// while(*(line + i) >= '0' && *(line + i) <= '9')
+		// 	i++;
+		// i++;
+		// filler->map[j] = (int *)malloc(sizeof(int) * filler->y);
+		// while (*(line + i))
+		// {
+		// 	if (*(line + i++) != filler->playermark)
+		// 		filler->map[j][k++] = 0;
+		// 	else
+		// 		filler->map[j][k++] = 1;
+		// }
+		ft_strdel(&line);
+		j++;
+	}
 }
 
 static void	check_name(char *line, t_filler *filler)
@@ -68,21 +107,21 @@ int			main(void)
 	char		*line;
 	t_filler	*filler;
 
-	write(1, "l\n", 2);
 	line = NULL;
 	filler = ft_create_filler();
 	if (get_next_line(1, &line) != 1 || line == NULL)
 		exit_func("Bad player info (err 1)");
 	check_name(line, filler);
+	ft_strdel(&line);
 	while (1)
 	{
-		ft_strdel(&line);
-		if (get_piece(line, filler) == 0)
-		{
-			write(1, "kek\n", 4);
-			ft_strdel(&line);
+		if (get_plateau(line, filler) == 0)
 			break;
-		}
+		get_next_line(1, &line);		//get the line with 01234... etc
+		ft_strdel(&line);
+		get_map(line, filler);			// malloced map
+		ft_strdel(&line);
 	}
+	system("leaks aroi.filler");
 	return (0);
 }

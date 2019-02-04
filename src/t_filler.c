@@ -8,5 +8,6 @@ t_filler		*ft_create_filler(void)
 	new->playermark = 0;
 	new->x = 0;
 	new->y = 0;
+	new->map = NULL;
 	return (new);
 }

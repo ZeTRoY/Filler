@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:38:34 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/02 18:42:08 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/04 13:34:59 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct  s_filler{
 	char		playermark;
 	int			x;
 	int			y;
+	int			**map;
 }               t_filler;
 
 t_filler		*ft_create_filler(void);
