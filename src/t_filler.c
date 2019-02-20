@@ -20,3 +20,26 @@ t_filler		*ft_create_filler(void)
 	new->coord[1] = 0;
 	return (new);
 }
+
+void			ft_destroy_filler(t_filler **filler)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < (*filler)->m)
+	{
+		free((*filler)->map[i]);
+		free((*filler)->piece->piece[i]);
+		// while (j < (*filler)->n)
+		// {
+		// 	j = 0;
+		// 	free((*filler)->board->distance[i][j]);
+		// }
+		// free((*filler)->board->distance[i]);
+	}
+	free((*filler)->piece);
+	// free((*filler)->board);
+	free(*filler);
+	filler = 0;
+}

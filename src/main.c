@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:37:58 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/20 11:10:10 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/20 20:24:21 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,32 +18,42 @@ static void	exit_func(char *str)
 	exit (1);
 }
 
-void		get_distances(t_filler *filler, int board[filler->m][filler->n],
-					int i, int j, int num)
+void		get_distances(t_filler *filler, int i, int j, int num)
+// {
+// 	filler->board[i][j].sought = 1;
+// 	if (i > 0 && filler->board[i - 1][j].sought == 0)
+// 	{
+// 		num + 1 < filler->board[i - 1][j].distance ? filler->board[i - 1][j].distance = num + 1 : 0;
+// 		get_distances(filler, i - 1, j, num + 1);
+// 	}
+// 	if (i < filler->m - 1 && filler->board[i + 1][j].sought == 0)
+// 	{
+// 		num + 1 < filler->board[i + 1][j].distance ? filler->board[i + 1][j].distance = num + 1 : 0;
+// 		get_distances(filler, i + 1, j, num + 1);
+// 	}
+// 	if (j > 0 && filler->board[i][j - 1].sought == 0)
+// 	{
+// 		num + 1 < filler->board[i][j - 1].distance ? filler->board[i][j - 1].distance = num + 1 : 0;
+// 		get_distances(filler, i, j - 1, num + 1);
+// 	}
+// 	if (j < filler->n - 1 && filler->board[i][j + 1].sought == 0)
+// 	{
+// 		num + 1 < filler->board[i][j + 1].distance ? filler->board[i][j + 1].distance = num + 1 : 0;
+// 		get_distances(filler, i, j + 1, num + 1);
+// 	}
+// 	filler->board[i][j].sought = 0;
+// }
 {
-	int temp;
+	int i1;
+	int j1;
 
-	if (num > (filler->m - 1) + (filler->n - 1))
-		return ;
-	if (i > 0)
+	i1 = 0;
+	while (i1 < filler->m)
 	{
-		num + 1 < board[i - 1][j] ? board[i - 1][j] = num + 1 : 0;
-		get_distances(filler, board, i - 1, j, num + 1);
-	}
-	if (i < filler->m - 1)
-	{
-		num + 1 < board[i + 1][j] ? board[i + 1][j] = num + 1 : 0;
-		get_distances(filler, board, i + 1, j, num + 1);
-	}
-	if (j > 0)
-	{
-		num + 1 < board[i][j - 1] ? board[i][j - 1] = num + 1 : 0;
-		get_distances(filler, board, i, j - 1, num + 1);
-	}
-	if (j < filler->n - 1)
-	{
-		num + 1 < board[i][j + 1] ? board[i][j + 1] = num + 1 : 0;
-		get_distances(filler, board, i, j + 1, num + 1);
+		j1 = 0;
+		while (j1 < filler->n)
+		{
+		}
 	}
 }
 
@@ -51,7 +61,6 @@ void		make_board(t_filler *filler)
 {
 	int i;
 	int j;
-	int board[filler->m][filler->n];
 
 	i = 0;
 	while (i < filler->m)
@@ -60,9 +69,10 @@ void		make_board(t_filler *filler)
 		while (j < filler->n)
 		{
 			if (filler->map[i][j] == '.')
-				board[i][j] = BIG_NUMBER;
+				filler->board[i][j].distance = BIG_NUMBER;
 			else
-				board[i][j] = 0;
+				filler->board[i][j].distance = 0;
+			filler->board[i][j].sought = 0;
 			j++;
 		}
 		i++;
@@ -73,8 +83,8 @@ void		make_board(t_filler *filler)
 		j = 0;
 		while (j < filler->n)
 		{
-			if (board[i][j] == 0)
-				get_distances(filler, board, i, j, 0);
+			if (filler->board[i][j].distance == 0)
+				get_distances(filler, i, j, 0);
 			j++;
 		}
 		i++;
@@ -84,7 +94,7 @@ void		make_board(t_filler *filler)
 	{
 		j = 0;
 		while (j < filler->n)
-			ft_printf("%d ", board[i][j++]);
+			ft_printf("%d ", filler->board[i][j++].distance);
 		ft_putendl("");
 		i++;
 	}
@@ -124,19 +134,19 @@ static void	get_map(char *line, t_filler *filler)
 {
 	int i;
 	int j;
-	int k;
 
-	j = 0;
+	i = 0;
 	filler->map = (char **)malloc(sizeof(char *) * filler->m);
-	while (j < filler->m)
+	filler->board = (t_board **)malloc(sizeof(t_board *) * filler->m);
+	while (i < filler->m)
 	{
-		i = 0;
-		k = 0;
+		j = 0;
 		get_next_line(1, &line); //error handle
-		while(*(line + i) >= '0' && *(line + i) <= '9')
-			i++;
-		i++;
-		filler->map[j++] = ft_strdup(line + i);
+		while(*(line + j) >= '0' && *(line + j) <= '9')
+			j++;
+		j++;
+		filler->map[i] = ft_strdup(line + j);
+		filler->board[i++] = (t_board *)malloc(sizeof(t_board) * filler->n);
 		ft_strdel(&line);
 	}
 }
