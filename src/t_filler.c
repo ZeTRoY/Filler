@@ -16,5 +16,7 @@ t_filler		*ft_create_filler(void)
 		return (NULL); //ft_strdel!
 	new->piece->x = 0;
 	new->piece->y = 0;
+	new->coord[0] = 0;
+	new->coord[1] = 0;
 	return (new);
 }
