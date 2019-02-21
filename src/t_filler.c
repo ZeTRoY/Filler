@@ -12,34 +12,49 @@ t_filler		*ft_create_filler(void)
 	new->m = 0;
 	new->n = 0;
 	new->map = NULL;
-	if ((new->piece = (t_piece *)malloc(sizeof(t_piece))) == NULL)
+	if ((new->piece = (t_piece *)malloc(sizeof(t_piece))) == NULL ||
+		(new->shape = (t_shape *)malloc(sizeof(t_shape))) == NULL)
 		return (NULL); //ft_strdel!
-	new->piece->x = 0;
-	new->piece->y = 0;
+	new->sum = 1000000;
+	new->piece->coord[0] = 0;
+	new->piece->coord[1] = 0;
 	new->coord[0] = 0;
 	new->coord[1] = 0;
 	return (new);
 }
 
-void			ft_destroy_filler(t_filler **filler)
+void			ft_refresh_filler(t_filler *filler)
 {
 	int i;
 	int j;
 
 	i = 0;
-	while (i < (*filler)->m)
+	while (i < filler->m)
 	{
-		free((*filler)->map[i]);
-		free((*filler)->piece->piece[i]);
-		// while (j < (*filler)->n)
-		// {
-		// 	j = 0;
-		// 	free((*filler)->board->distance[i][j]);
-		// }
-		// free((*filler)->board->distance[i]);
+		free(filler->map[i]);
+		i++;
 	}
-	free((*filler)->piece);
-	// free((*filler)->board);
-	free(*filler);
-	filler = 0;
+	free(filler->map);
+	i = 0;
+	while (i < filler->piece->coord[1])
+	{
+		free(filler->piece->piece[i]);
+		i++;
+	}
+	free(filler->piece->piece);
+	i = 0;
+	while (i < filler->shape->coord[1][0] - filler->shape->coord[0][0] + 1)
+	{
+		free(filler->shape->shape[i]);
+		i++;
+	}
+	free(filler->shape->shape);
+	filler->map = NULL;
+	filler->sum = 1000000;
+	filler->piece->coord[0] = 0;
+	filler->piece->coord[1] = 0;
+	filler->coord[0] = 0;
+	filler->coord[1] = 0;
+	filler->m = 0;
+	filler->n = 0;
 }

@@ -6,7 +6,7 @@
 #    By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/01 13:22:06 by aroi              #+#    #+#              #
-#    Updated: 2019/02/02 18:33:25 by aroi             ###   ########.fr        #
+#    Updated: 2019/02/21 11:05:34 by aroi             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ OBJ		=	$(addprefix obj/, $(addsuffix .o, $(FILES)))
 obj/%.o: src/%.c
 	gcc -o $@ -c $^ $(HEADERS)
 
-all: $(NAME)
+all: $(NAME) ./includes/filler.h
 
 $(NAME): libft/libft.a $(OBJ)
 	gcc $(OBJ) $(FLAGS) $(HEADERS) -L libft -lft -o $(NAME)
