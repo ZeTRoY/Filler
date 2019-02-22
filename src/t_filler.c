@@ -8,16 +8,16 @@ t_filler		*ft_create_filler(void)
 
 	if ((new = (t_filler *)malloc(sizeof(t_filler))) == NULL)
 		return (NULL);
-	new->playermark = 0;
 	new->m = 0;
 	new->n = 0;
+	new->place = 0;
 	new->map = NULL;
 	if ((new->piece = (t_piece *)malloc(sizeof(t_piece))) == NULL ||
 		(new->shape = (t_shape *)malloc(sizeof(t_shape))) == NULL)
 		return (NULL); //ft_strdel!
 	new->sum = 1000000;
-	new->piece->coord[0] = 0;
-	new->piece->coord[1] = 0;
+	new->piece->len[0] = 0;
+	new->piece->len[1] = 0;
 	new->coord[0] = 0;
 	new->coord[1] = 0;
 	return (new);
@@ -36,7 +36,7 @@ void			ft_refresh_filler(t_filler *filler)
 	}
 	free(filler->map);
 	i = 0;
-	while (i < filler->piece->coord[1])
+	while (i < filler->piece->len[1])
 	{
 		free(filler->piece->piece[i]);
 		i++;
@@ -51,8 +51,8 @@ void			ft_refresh_filler(t_filler *filler)
 	free(filler->shape->shape);
 	filler->map = NULL;
 	filler->sum = 1000000;
-	filler->piece->coord[0] = 0;
-	filler->piece->coord[1] = 0;
+	filler->piece->len[0] = 0;
+	filler->piece->len[1] = 0;
 	filler->coord[0] = 0;
 	filler->coord[1] = 0;
 	filler->m = 0;
