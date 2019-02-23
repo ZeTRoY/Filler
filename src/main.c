@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:37:58 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/22 19:59:46 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/23 18:13:49 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,14 @@ void		func_2(t_filler *filler, int xb, int yb, int xs, int ys)
 		}
 		i++; 
 	}
-	if (filler->place == 'l' && (filler->sum < xs || filler->shape->coord[1][0] - filler->shape->coord[0][0] == 0) && filler->coord[0] == 0)
+		// ft_printf("|%d %d|\n",filler->sum, xb -xs);
+	if (filler->place == 'l' && filler->sum >= xb - xs)
 	{
-		filler->sum = xs;
+		filler->sum = xb - xs;
 		filler->coord[0] = xb - xs;
 		filler->coord[1] = yb - ys;
 	}
-	else if (filler->sum > sum)
+	else if (filler->place == 'h' && filler->sum > sum)
 	{
 		filler->sum = sum;
 		filler->coord[0] = xb - xs;
@@ -166,6 +167,8 @@ void		func_1(t_filler *filler, int xshape, int yshape)
 	int j;
 	
 	i = 0;
+	if (filler->place == 'h')
+	{
 	while (i < filler->m)
 	{
 		j = 0;
@@ -179,6 +182,21 @@ void		func_1(t_filler *filler, int xshape, int yshape)
 			j++;
 		}
 		i++;
+	}
+	}
+	else
+	{
+		i = filler->m;
+		while (i-- > 0)
+		{
+			j = 0;
+			while (j < filler->n)
+			{
+				if (filler->map[i][j] == filler->aroi && ft_check_piece(filler, i, j, xshape, yshape))
+					func_2(filler, i, j, xshape, yshape);
+				j++;
+			}
+		}
 	}
 }
 
@@ -202,8 +220,8 @@ void		place_piece(t_filler *filler)
 	}
 	else
 	{
-		i = filler->shape->coord[1][0] - filler->shape->coord[0][0] + 1;
-		while (i-- > 0)
+		i = -1;
+		while (++i < filler->shape->coord[1][0] - filler->shape->coord[0][0] + 1)
 		{
 			// write(1, "wow\n", 4);
 			j = filler->shape->coord[1][1] - filler->shape->coord[0][1] + 1;
@@ -498,7 +516,7 @@ void		find_place(t_filler *filler)
 
 	if ((i = check_height(filler, 0)) == 0)
 	{
-		filler->sum = 0;
+		// filler->sum = 0;
 		filler->place = 'l';
 	}
 	else
