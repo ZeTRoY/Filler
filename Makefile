@@ -6,7 +6,7 @@
 #    By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/01 13:22:06 by aroi              #+#    #+#              #
-#    Updated: 2019/02/21 11:05:34 by aroi             ###   ########.fr        #
+#    Updated: 2019/02/25 19:07:40 by aroi             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,15 @@ NAME	=	aroi.filler
 FLAGS	=	-Wall -Werror -Wextra
 
 FILES	=	main \
-			t_filler
+			error \
+			t_filler \
+			read_name_map \
+			read_piece \
+			make_board \
+			calculate_distances \
+			calculations_of_distances \
+			place_piece_1 \
+			place_piece_2
 
 HEADERS	=	-I ./includes/ -I ./libft/includes
 

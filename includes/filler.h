@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:38:34 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/25 17:39:43 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/25 19:46:32 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,19 @@ typedef struct	s_shape
 }				t_shape;
 
 /*
+**  t_coord				- structure to store coordinates of some object.
+**
+**  int x				- x-coordinate.
+**  int y				- y-coordinate, respectively.
+*/
+
+typedef struct	s_coord
+{
+	int			x;
+	int			y;
+}				t_coord;
+
+/*
 **  t_filler			- structure, where you can find min sum of board's cells
 **					where the shape can fit, my and opponent's characters
 **					on the map, map's size, the map, final coordinates
@@ -106,11 +119,11 @@ typedef struct	s_shape
 
 typedef struct	s_filler
 {
-	int			sum;
 	char		aroi;
 	char		opponent;
 	int			m;
 	int			n;
+	int			sum;
 	int			coord[2];
 	char		**map;
 	t_piece		*piece;
@@ -120,4 +133,17 @@ typedef struct	s_filler
 
 t_filler		*ft_create_filler(void);
 void			ft_refresh_filler(t_filler *filler);
+void			check_first_line(char *line, t_filler *filler);
+int				get_size(char *line, t_filler *filler);
+void			get_map(char *line, t_filler *filler);
+void			get_size_of_piece(char *line, t_filler *filler);
+void			get_piece(t_filler *filler, char *line);
+void			make_board(t_filler *filler);
+void			calculate_distances(t_filler *filler);
+void			get_distances_for_players(t_filler *filler);
+void			get_distance_to_cell(t_filler *filler, int x, int y);
+void			find_to_place(t_filler *filler);
+void			place_piece(t_filler *filler, t_coord board, t_coord shape);
+int				exit_func(char *str);
+
 #endif
