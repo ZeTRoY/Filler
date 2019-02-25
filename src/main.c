@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:37:58 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/23 18:13:49 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/25 17:43:30 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,38 +22,16 @@ static void	exit_func(char *str)
 
 void		get_distances(t_filler *filler, char player, int i, int j)
 {
-// 	filler->board[i][j].sought = 1;
-// 	if (i > 0 && filler->board[i - 1][j].sought == 0)
-// 	{
-// 		num + 1 < filler->board[i - 1][j].distance ? filler->board[i - 1][j].distance = num + 1 : 0;
-// 		get_distances(filler, i - 1, j, num + 1);
-// 	}
-// 	if (i < filler->m - 1 && filler->board[i + 1][j].sought == 0)
-// 	{
-// 		num + 1 < filler->board[i + 1][j].distance ? filler->board[i + 1][j].distance = num + 1 : 0;
-// 		get_distances(filler, i + 1, j, num + 1);
-// 	}
-// 	if (j > 0 && filler->board[i][j - 1].sought == 0)
-// 	{
-// 		num + 1 < filler->board[i][j - 1].distance ? filler->board[i][j - 1].distance = num + 1 : 0;
-// 		get_distances(filler, i, j - 1, num + 1);
-// 	}
-// 	if (j < filler->n - 1 && filler->board[i][j + 1].sought == 0)
-// 	{
-// 		num + 1 < filler->board[i][j + 1].distance ? filler->board[i][j + 1].distance = num + 1 : 0;
-// 		get_distances(filler, i, j + 1, num + 1);
-// 	}
-// 	filler->board[i][j].sought = 0;
 	int x;
 	int y;
 
 	x = 0;
 	while (x < filler->m)
 	{
-		y = -1;
-		while (++y < filler->n)
+		y = 0;
+		while (y < filler->n)
 		{
-			if (player == 'a')
+			if (player == filler->aroi)
 			{
 				if (filler->board[x][y].aroi > ABS(x - i) + ABS(y - j))
 					filler->board[x][y].aroi = ABS(x - i) + ABS(y - j);
@@ -63,36 +41,47 @@ void		get_distances(t_filler *filler, char player, int i, int j)
 				if (filler->board[x][y].opponent > ABS(x - i) + ABS(y - j))
 					filler->board[x][y].opponent = ABS(x - i) + ABS(y - j);
 			}
-			
+			y++;
 		}
 		x++;
 	}
 }
 
-int		check_height(t_filler *filler, int add)
+int		check_path(t_filler *filler, int xaroi)
 {
-	int	i;
-	int	j;
-	int	k;
+	int i;
 
 	i = 0;
-	j = -1;
-	k = -1;
+	while (i < xaroi)
+	{
+		if (ft_tolower(filler->map[i][filler->n - 1]) == filler->opponent)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int		check_height(t_filler *filler, int *xaroi, int *xopp)
+{
+	int	i;
+
+	i = 0;
+	*xaroi = -1;
+	*xopp = -1;
 	while (i < filler->m)
 	{
-		if (j == -1 && ft_strchr(filler->map[i], filler->aroi))
-			j = i;
-		if (k == -1 && (ft_strchr(filler->map[i], filler->opponent) ||
-			ft_strchr(filler->map[i], ft_tolower(filler->opponent))))
-			k = i;
-		if (j > -1 && k > -1)
+		if (*xaroi == -1 && ft_strchr(filler->map[i], filler->aroi))
+			*xaroi = i;
+		if (*xopp == -1 && (ft_strchr(filler->map[i], filler->opponent) ||
+				ft_strchr(filler->map[i], ft_tolower(filler->opponent))))
+			*xopp = i;
+		if (*xaroi > -1 && *xopp > -1)
 			break;
 		i++;
 	}
-	// ft_printf("j: %d, k: %d\n", j, k);
-	if (j == -1)
-		return (j);
-	else if (j - add >= k && j != 0)
+	if (*xaroi == -1)
+		return (*xaroi);
+	else if (*xaroi >= *xopp && *xaroi != 0)
 		return (0);
 	return (1);
 }
@@ -117,10 +106,7 @@ void		func_2(t_filler *filler, int xb, int yb, int xs, int ys)
 				if (ft_toupper((filler->map[xb - xs + i][yb - ys + j]) == filler->opponent)
 					|| (filler->map[xb - xs + i][yb - ys + j] == filler->aroi
 					&& placed))
-				{
-					// write(1, "kronos\n", 7); //sad
 					return ;
-				}
 				if (filler->map[xb - xs + i][yb - ys + j] == filler->aroi)
 					placed = 1;
 				sum += filler->board[xb - xs + i][yb - ys + j].aroi + filler->board[xb - xs + i][yb - ys + j].opponent;
@@ -129,21 +115,12 @@ void		func_2(t_filler *filler, int xb, int yb, int xs, int ys)
 		}
 		i++; 
 	}
-		// ft_printf("|%d %d|\n",filler->sum, xb -xs);
-	if (filler->place == 'l' && filler->sum >= xb - xs)
-	{
-		filler->sum = xb - xs;
-		filler->coord[0] = xb - xs;
-		filler->coord[1] = yb - ys;
-	}
-	else if (filler->place == 'h' && filler->sum > sum)
+	if (filler->sum > sum)
 	{
 		filler->sum = sum;
 		filler->coord[0] = xb - xs;
 		filler->coord[1] = yb - ys;
 	}
-	// ft_printf("sum: %d\n", filler->sum);
-	// return (0);
 }
 
 int		ft_check_piece(t_filler *filler, int xb, int yb, int xs, int ys)
@@ -167,8 +144,8 @@ void		func_1(t_filler *filler, int xshape, int yshape)
 	int j;
 	
 	i = 0;
-	if (filler->place == 'h')
-	{
+	// if (filler->place == 'h')
+	// {
 	while (i < filler->m)
 	{
 		j = 0;
@@ -183,21 +160,21 @@ void		func_1(t_filler *filler, int xshape, int yshape)
 		}
 		i++;
 	}
-	}
-	else
-	{
-		i = filler->m;
-		while (i-- > 0)
-		{
-			j = 0;
-			while (j < filler->n)
-			{
-				if (filler->map[i][j] == filler->aroi && ft_check_piece(filler, i, j, xshape, yshape))
-					func_2(filler, i, j, xshape, yshape);
-				j++;
-			}
-		}
-	}
+	// }
+	// else
+	// {
+	// 	i = filler->m;
+	// 	while (i-- > 0)
+	// 	{
+	// 		j = 0;
+	// 		while (j < filler->n)
+	// 		{
+	// 			if (filler->map[i][j] == filler->aroi && ft_check_piece(filler, i, j, xshape, yshape))
+	// 				func_2(filler, i, j, xshape, yshape);
+	// 			j++;
+	// 		}
+	// 	}
+	// }
 }
 
 void		place_piece(t_filler *filler)
@@ -205,8 +182,8 @@ void		place_piece(t_filler *filler)
 	int i;
 	int j;
 
-	if (filler->place == 'h')
-	{
+	// if (filler->place == 'h')
+	// {
 		i = -1;
 		while (++i <= filler->shape->coord[1][0] - filler->shape->coord[0][0])
 		{
@@ -217,21 +194,63 @@ void		place_piece(t_filler *filler)
 					func_1(filler, i, j);
 			}
 		}
-	}
-	else
+	// }
+	// else
+	// {
+	// 	i = -1;
+	// 	while (++i < filler->shape->coord[1][0] - filler->shape->coord[0][0] + 1)
+	// 	{
+	// 		// write(1, "wow\n", 4);
+	// 		j = filler->shape->coord[1][1] - filler->shape->coord[0][1] + 1;
+	// 		// ft_printf("%d %d %d\n", filler->shape->coord[1][1], filler->coord[0][1]);
+	// 		while (j-- > 0)
+	// 		{
+	// 			if (filler->shape->shape[i][j] == '*')
+	// 				func_1(filler, i, j);
+	// 		}
+	// 	}
+	// }
+}
+
+void	get_distance_to_cell(t_filler *filler, int x, int y)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < filler->m)
 	{
-		i = -1;
-		while (++i < filler->shape->coord[1][0] - filler->shape->coord[0][0] + 1)
+		j = 0;
+		while (j < filler->n)
 		{
-			// write(1, "wow\n", 4);
-			j = filler->shape->coord[1][1] - filler->shape->coord[0][1] + 1;
-			// ft_printf("%d %d %d\n", filler->shape->coord[1][1], filler->coord[0][1]);
-			while (j-- > 0)
-			{
-				if (filler->shape->shape[i][j] == '*')
-					func_1(filler, i, j);
-			}
+			if (filler->board[i][j].aroi > ABS(x - i) + ABS(y - j))
+				filler->board[i][j].aroi = ABS(x - i) + ABS(y - j);
+			if (ft_toupper(filler->map[i][j]) == filler->opponent)
+				get_distances(filler, filler->opponent, i, j);
+			j++;
 		}
+		i++;
+	}
+}
+
+void	get_distances_for_players(t_filler *filler)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < filler->m)
+	{
+		j = 0;
+		while (j < filler->n)
+		{
+			if (filler->map[i][j] == filler->aroi)
+				get_distances(filler, filler->aroi, i, j);
+			else if (ft_toupper(filler->map[i][j]) == filler->opponent)
+				get_distances(filler, filler->opponent, i, j);
+			j++;
+		}
+		i++;
 	}
 }
 
@@ -261,58 +280,6 @@ void		make_board(t_filler *filler)
 		}
 		i++;
 	}
-	//add distances for aroi
-	i = 0;
-	while (i < filler->m)
-	{
-		j = 0;
-		while (j < filler->n)
-		{
-			if (filler->map[i][j] == filler->aroi)
-				get_distances(filler, 'a', i, j);
-			j++;
-		}
-		i++;
-	}
-	//add distances for oppponent
-	i = 0;
-	while (i < filler->m)
-	{
-		j = 0;
-		while (j < filler->n)
-		{
-			if (ft_toupper(filler->map[i][j]) == filler->opponent)
-				get_distances(filler, 0, i, j);
-			j++;
-		}
-		i++;
-	}
-	//place piece
-	i = -1;
-	// ft_printf("shape:\n|0: %2d 1: %2d|\n|0: %2d 1: %2d|\n", filler->shape->coord[0][0], filler->shape->coord[0][1], filler->shape->coord[1][0], filler->shape->coord[1][1]);
-	place_piece(filler);
-
-	// write(1, "\n", 1);
-	//								printing of shape table
-	// i = 0;
-	// while (filler->shape->shape[i])
-	// {
-	// 	ft_putendl(filler->shape->shape[i++]);
-	// }
-
-	//								printing of distances table
-	// i = 0;
-	// while (i < filler->m)
-	// {
-	// 	j = 0;
-	// 	while (j < filler->n)
-	// 	{
-	// 		ft_printf("%3d ", filler->board[i][j].aroi + filler->board[i][j].opponent);
-	// 		j++;
-	// 	}
-	// 	ft_putendl("");
-	// 	i++;
-	// }
 }
 
 void	cut_shape(t_filler *filler)
@@ -343,10 +310,6 @@ void	func_3(t_filler *filler, char *line)
 	while (++i < filler->piece->len[1])
 	{
 		get_next_line(0, &line); //error handle
-	
-		write(filler->fd, line, ft_strlen(line));
-		write(filler->fd, "\n", 1);
-		
 		filler->piece->piece[i] = ft_strdup(line);
 		ft_strdel(&line);
 		j = -1;
@@ -375,9 +338,6 @@ static void get_piece(char *line, t_filler *filler)
 	int j;
 
 	get_next_line(0, &line);
-	write(filler->fd, line, ft_strlen(line));
-	write(filler->fd, "\n", 1);
-	
 	if (ft_strnequ(line, "Piece", 5) == 0)
 		return ;
 	if (*(line + 6) >= '0' && *(line + 6) <= '9')
@@ -413,10 +373,6 @@ static void	get_map(char *line, t_filler *filler)
 	{
 		j = 0;
 		get_next_line(0, &line); //error handle
-		
-		write(filler->fd, line, ft_strlen(line));
-		write(filler->fd, "\n", 1);
-
 		while(*(line + j) >= '0' && *(line + j) <= '9')
 			j++;
 		j++;
@@ -432,10 +388,6 @@ static int	get_plateau(char *line, t_filler *filler)
 
 	i = 0;
 	get_next_line(0, &line);
-
-	write(filler->fd, line, ft_strlen(line));
-	write(filler->fd, "\n", 1);
-	
 	if (ft_strnequ("Plateau ", line, 8) == 0)
 	{
 		ft_strdel(&line);
@@ -459,6 +411,12 @@ static int	get_plateau(char *line, t_filler *filler)
 	return (1);
 }
 
+void	skip_whitespaces(char *line, int *i)
+{
+	while (*(line + *i) == ' ')
+		(*i)++;
+}
+
 static void	check_name(char *line, t_filler *filler)
 {
 	int i;
@@ -466,8 +424,7 @@ static void	check_name(char *line, t_filler *filler)
 	i = 0;
 	if (ft_strncmp("$$$ exec ", line, 9) != 0 || *(line + 9) != 'p')
 		exit_func("Bad player info");
-	while(*(line + 10 + i) == ' ')
-		i++;
+	skip_whitespaces(line + 10, &i);
 	if (ft_atoi(line + 10 + i) == 1)
 	{
 		filler->aroi = 'O';
@@ -481,53 +438,41 @@ static void	check_name(char *line, t_filler *filler)
 	else
 		exit_func("Bad player info");
 	i++;
-	while(*(line + 10 + i) == ' ')
-		i++;
+	skip_whitespaces(line + 10, &i);
 	if (*(line + 10 + i++) != ':')
 		exit_func("Bad player info");
-	while(*(line + 10 + i) == ' ')
-		i++;
+	skip_whitespaces(line + 10, &i);
 	if (ft_strstr(line + 10 + i, "aroi.filler") == NULL)
 		exit_func("Bad player info");
 }
 
-// void		get_higher(t_filler *filler)
-// {
-// 	int i;
-// 	int j;
-
-// 	i = 0;
-// 	while (i < filler->m)
-// 	{
-// 		j = 0;
-// 		while (j < filler->n)
-// 		{
-// 			if (filler->map[i][j] == filler->aroi)
-// 				place_piece(filler);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
-
 void		find_place(t_filler *filler)
 {
 	int i;
+	int xaroi;
+	int xopp;
 
-	if ((i = check_height(filler, 0)) == 0)
-	{
-		// filler->sum = 0;
-		filler->place = 'l';
-	}
-	else
-		filler->place = 'h';
-	// ft_printf("%i\n", i);
+	make_board(filler);
+	i = check_height(filler, &xaroi, &xopp);
 	if (i == -1)
 		return ;
-	// if (i == 0)
-	// 	get_higher(filler);
-	// else
-		make_board(filler);
+	if (filler->m < 20 || filler->n < 20)
+	{
+		if (i == 0)
+		{
+			if (check_path(filler, xaroi) == 1)
+				get_distance_to_cell(filler, 0, filler->n - 1);
+			else
+				get_distance_to_cell(filler, filler->m - 1, 0);
+		}
+		else if (xaroi < xopp)
+			get_distance_to_cell(filler, xopp - 1, 0);
+		else
+			get_distances_for_players(filler);
+	}
+	else
+		get_distances_for_players(filler);
+	place_piece(filler);
 }
 
 int			main(void)
@@ -535,73 +480,25 @@ int			main(void)
 	char		*line;
 	t_filler	*filler;
 
-	int			fd;//del
-	fd = open("file_write", O_WRONLY);
-
 	line = NULL;
 	filler = ft_create_filler();
-	filler->fd = fd;
 	if (get_next_line(0, &line) < 0 || line == NULL)
-	{	
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		
 		exit_func("Bad player info (err 1)");
-	}
-	
-	write(fd, line, ft_strlen(line));
-	write(fd, "\n", 1);
-	
 	check_name(line, filler);
 	ft_strdel(&line);
 	while (1)
 	{
 		if (get_plateau(line, filler) == 0)
 			break;
-		get_next_line(0, &line);		//get the line with 01234... etc
-		
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		
+		get_next_line(0, &line);
 		ft_strdel(&line);
 		get_map(line, filler);			// malloced map
 		get_piece(line, filler);
 		find_place(filler);
-		filler->coord[0] -= filler->shape->coord[0][0];
-		filler->coord[1] -= filler->shape->coord[0][1];
-		ft_printf("%d %d\n", filler->coord[0], filler->coord[1]);
+		ft_printf("%d %d\n", filler->coord[0] - filler->shape->coord[0][0],
+			filler->coord[1] - filler->shape->coord[0][1]);
 		ft_refresh_filler(filler);
 	}
-	// int i = 0;
-	// while (i < filler->m)
-	// {
-	// int j = 0;
-	// 	while (j < filler->n)
-	// 	{
-	// 		ft_printf("%2d", filler->map[i][j]);
-	// 		j == filler->n - 1 ? write(1, "\n", 1) : 0;
-	// 		j++;
-	// 	}
-	// 	ft_printf("%s\n", filler->map[i]);
-	// 	i++;
-	// }
-	// int i = 0;
-	// while (i < filler->piece->coord[1])
-	// {
-	// int j = 0;
-	// 	while (j < filler->n)
-	// 	{
-	// 		ft_printf("%2d", filler->map[i][j]);
-	// 		j == filler->n - 1 ? write(1, "\n", 1) : 0;
-	// 		j++;
-	// 	}
-	// 	ft_printf("%s\n", filler->piece->piece[i]);
-	// 	i++;
-	// }
-
-	// int i = 0;
-	// while (filler->shape->shape[i])
-	// 	ft_printf("%s\n", filler->shape->shape[i++]);
-	// system("leaks aroi.filler");
+	system("leaks aroi.filler");
 	return (0);
 }

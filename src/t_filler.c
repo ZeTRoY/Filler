@@ -1,6 +1,4 @@
-#include "filler.h"
-
-// t_piece			
+#include "filler.h"	
 
 t_filler		*ft_create_filler(void)
 {
@@ -10,7 +8,6 @@ t_filler		*ft_create_filler(void)
 		return (NULL);
 	new->m = 0;
 	new->n = 0;
-	new->place = 0;
 	new->map = NULL;
 	if ((new->piece = (t_piece *)malloc(sizeof(t_piece))) == NULL ||
 		(new->shape = (t_shape *)malloc(sizeof(t_shape))) == NULL)

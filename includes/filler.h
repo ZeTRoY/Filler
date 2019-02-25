@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:38:34 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/22 16:48:26 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/25 17:39:43 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "get_next_line.h"
 
-# define BIG_NUMBER 9876543
+# define BIG_NUMBER 10101
 # define ABS(x)	(((x) > 0) ? (x) : -(x))
 
 /*
@@ -87,7 +87,6 @@ typedef struct	s_shape
 **					and board with distances.
 **
 **  int sum				- a min sum of cells on board where shape can fit.
-**  int place			- indicates either aroi is lower than opponent or higher.
 **  char aroi			- a mark which determines your cells on the map.
 **  char opponent		- a mark which determines opponent's cells on the map.
 **  int m				- a quantity of map's rows.
@@ -108,7 +107,6 @@ typedef struct	s_shape
 typedef struct	s_filler
 {
 	int			sum;
-	char		place;
 	char		aroi;
 	char		opponent;
 	int			m;
@@ -118,7 +116,6 @@ typedef struct	s_filler
 	t_piece		*piece;
 	t_shape		*shape;
 	t_board		**board;
-	int			fd;//del
 }				t_filler;
 
 t_filler		*ft_create_filler(void);
