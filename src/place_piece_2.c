@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 18:57:01 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/25 18:58:27 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/26 12:26:28 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		place_piece(t_filler *filler, t_coord board, t_coord shape)
 			if (filler->shape->shape[i][j] == '*')
 			{
 				if ((tmp = check_cell(filler, board.x - shape.x + i,
-					board.y - shape.y + i, &placed)) < 0)
+					board.y - shape.y + j, &placed)) < 0)
 					return ;
 				else
 					sum += tmp;

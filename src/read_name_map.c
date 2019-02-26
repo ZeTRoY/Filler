@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 17:57:08 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/25 19:46:10 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/26 12:17:08 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void		get_map(char *line, t_filler *filler)
 	while (i < filler->m)
 	{
 		j = 0;
-		if (get_next_line(0, &line) < 0)
+		if (get_next_line(0, &line) < 0 || line == NULL)
 			exit_func("Bad file input (map)");
 		while (*(line + j) >= '0' && *(line + j) <= '9')
 			j++;
@@ -39,7 +39,7 @@ int			get_size(char *line, t_filler *filler)
 	int i;
 
 	i = 0;
-	get_next_line(0, &line) < 0 ? exit_func("Bad input file (plateau)") : 0;
+	get_next_line(0, &line) < 0 || line == NULL ? exit_func("Bad input") : 0;
 	if (ft_strnequ("Plateau ", line, 8) == 0)
 	{
 		ft_strdel(&line);

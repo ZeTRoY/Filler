@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/25 18:00:15 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/25 19:42:56 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/26 12:17:48 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		get_piece(t_filler *filler, char *line)
 	i = -1;
 	while (++i < filler->piece->len[1])
 	{
-		if (get_next_line(0, &line) < 0)
+		if (get_next_line(0, &line) < 0 || line == NULL)
 			exit_func("Bad file input (piece)");
 		filler->piece->piece[i] = ft_strdup(line);
 		ft_strdel(&line);
@@ -68,7 +68,7 @@ void		get_size_of_piece(char *line, t_filler *filler)
 	int i;
 	int j;
 
-	get_next_line(0, &line) < 0 ? exit_func("Bad file input (piece size)") : 0;
+	get_next_line(0, &line) < 0 || line == NULL ? exit_func("Bad input") : 0;
 	if (ft_strnequ(line, "Piece", 5) == 0)
 		return ;
 	if (*(line + 6) >= '0' && *(line + 6) <= '9')
