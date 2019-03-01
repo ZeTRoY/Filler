@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:38:34 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/25 19:46:32 by aroi             ###   ########.fr       */
+/*   Updated: 2019/02/26 13:37:15 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ typedef struct	s_coord
 **					opponent's character as opponent's cells.
 **  t_piece *piece		- a structure with piece in it.
 **	t_shape *shape		- a structure with shape of piece in it.
-**	t_board **board		- two-dimensional array where each cell contains of
+**	t_board **board		- two-dimensional array where each cell consists of
 **					aroi's and opponent's distance
 **					to it's nearest mark character.
 */
