@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:38:34 by aroi              #+#    #+#             */
-/*   Updated: 2019/02/26 13:37:15 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/02 17:57:19 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ typedef struct	s_filler
 	t_piece		*piece;
 	t_shape		*shape;
 	t_board		**board;
+	int			**opp_board;
 }				t_filler;
 
 t_filler		*ft_create_filler(void);
