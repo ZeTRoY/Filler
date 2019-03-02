@@ -6,13 +6,19 @@
 #    By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/02/28 18:27:46 by aroi              #+#    #+#              #
-#    Updated: 2019/02/28 19:41:11 by aroi             ###   ########.fr        #
+#    Updated: 2019/03/02 15:08:38 by aroi             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	visualizer
 
-FILES	=	main
+FILES	=	main \
+			window \
+			get_names \
+			read \
+			map \
+			show_winner \
+			exit
 
 HEADERS	=	-I ./includes/ -I ../libft/includes
 
