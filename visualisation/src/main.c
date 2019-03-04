@@ -6,19 +6,20 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 16:01:37 by aroi              #+#    #+#             */
-/*   Updated: 2019/03/02 17:44:09 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/04 15:08:02 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visual.h"
 
-int		main(void)
+int		main(int argc, char **argv)
 {
 	char		*line;
 	char		**map;
 	t_visual	vis;
 
 	line = NULL;
+	ft_parse_options(argc, argv, &vis);
 	setlocale(LC_ALL, "");
 	if (!initscr())
 		exit_func("Screen initialisation problem.");
@@ -34,5 +35,6 @@ int		main(void)
 	while (wgetch(vis.winner) != ESC_KEY)
 		continue;
 	endwin();
+	system("killall afplay");
 	return (0);
 }

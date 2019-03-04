@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 16:25:41 by aroi              #+#    #+#             */
-/*   Updated: 2019/03/02 17:01:14 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/04 11:26:01 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	initialise_window(t_visual *vis)
 	init_pair(1, COLOR_WHITE, COLOR_GREEN);
 	init_pair(2, COLOR_BLACK, COLOR_MAGENTA);
 	init_pair(3, COLOR_YELLOW, COLOR_BLUE);
+	init_pair(4, COLOR_WHITE, COLOR_RED);
+	init_pair(5, COLOR_BLACK, COLOR_YELLOW);
 }
 
 void	resize_handler(int sig)

@@ -6,7 +6,7 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/01 13:37:58 by aroi              #+#    #+#             */
-/*   Updated: 2019/03/02 18:02:19 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/02 18:37:25 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,6 @@ int			main(void)
 		get_piece(filler, line);
 		make_board(filler);
 		calculate_distances(filler);
-		
-		// int i = 0;
-		// int j;
-		// while (i < filler->m)
-		// {
-		// 	j = 0;
-		// 	while (j < filler->n)
-		// 	{
-		// 		ft_printf("%d ", filler->board[i][j].aroi + filler->board[i][j].opponent);
-		// 		j++;
-		// 	}
-		// 	ft_putendl("");
-		// 	i++;
-		// }
-
 		find_to_place(filler);
 		ft_printf("%d %d\n", filler->coord[0] - filler->shape->coord[0][0],
 			filler->coord[1] - filler->shape->coord[0][1]);

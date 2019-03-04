@@ -6,34 +6,47 @@
 /*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 16:25:57 by aroi              #+#    #+#             */
-/*   Updated: 2019/03/02 17:02:11 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/04 15:05:53 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "visual.h"
 
+static int	get_color(char *str)
+{
+	if (ft_strequ(str, TURTLE))
+		return (1);
+	else if (ft_strequ(str, CRAB_INVADER))
+		return (2);
+	else if (ft_strequ(str, LANTERN) || ft_strequ(str, JP_OGRE) ||
+			ft_strequ(str, MUSHROOM) || ft_strequ(str, ROCKET))
+		return (4);
+	else
+		return (5);
+}
+
 static void	put_char(t_visual *vis, char **map, int i, int j)
 {
 	if (map[i][j] == '.')
 	{
-		mvwaddstr(vis->map, i + 1, j * 2 + 1, EMPTY);
+		mvwaddstr(vis->map, i + 1, j * 2 + 1, vis->options.empty);
 		vis->filler.empty++;
 	}
 	else if (map[i][j] == 'o' || map[i][j] == 'O')
 	{
 		if (map[i][j] == 'o')
-			wattron(vis->map, COLOR_PAIR(1));
-		mvwaddstr(vis->map, i + 1, j * 2 + 1, PLAYER_ONE);
+			wattron(vis->map, COLOR_PAIR(get_color(vis->options.p1)));
+		mvwaddstr(vis->map, i + 1, j * 2 + 1, vis->options.p1);
 		vis->filler.p1++;
-		wattroff(vis->map, COLOR_PAIR(1));
+		wattroff(vis->map, COLOR_PAIR(get_color(vis->options.p1)));
 	}
 	else
 	{
 		if (map[i][j] == 'x')
-			wattron(vis->map, COLOR_PAIR(2));
-		mvwaddstr(vis->map, i + 1, j * 2 + 1, PLAYER_TWO);
+			wattron(vis->map, COLOR_PAIR(get_color(vis->options.p2)));
+		mvwaddstr(vis->map, i + 1, j * 2 + 1, vis->options.p2);
 		vis->filler.p2++;
-		wattroff(vis->map, COLOR_PAIR(2));
+		wattroff(vis->map, COLOR_PAIR(get_color(vis->options.p2)));
 	}
 }
 
@@ -49,6 +62,9 @@ void		draw_map(t_visual *vis, char **map)
 		while (++j < vis->n)
 			put_char(vis, map, i, j);
 	}
+	if (vis->options.sound)
+		vis->options.sound == 1 ? system("afplay -v 0.8 ./music/chomp_1.mp3 &")
+			: system("afplay -v 0.8 ./music/chomp_2.wav &");
 }
 
 void		del_map(char **map)

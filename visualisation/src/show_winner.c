@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   show_winner.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aroi <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: aroi <aroi@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/02 16:26:10 by aroi              #+#    #+#             */
-/*   Updated: 2019/03/02 16:26:11 by aroi             ###   ########.fr       */
+/*   Updated: 2019/03/04 11:09:47 by aroi             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,14 @@ static int	get_length(t_visual *vis)
 		len = ft_strlen(vis->p1_name);
 		create_winner_window(vis, len);
 		mvwaddstr(vis->winner, 3, 4, vis->p1_name);
+		vis->options.sound ? system("afplay -v 0.8 ./music/1.flac &") : 0;
 	}
 	else
 	{
 		len = ft_strlen(vis->p2_name);
 		create_winner_window(vis, len);
 		mvwaddstr(vis->winner, 3, 4, vis->p2_name);
+		vis->options.sound ? system("afplay -v 0.8 ./music/2.wav &") : 0;
 	}
 	return (len);
 }
